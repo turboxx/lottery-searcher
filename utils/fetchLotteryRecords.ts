@@ -25,18 +25,19 @@ const columns = [
 
 const toDraft = (record: any, draft: 1 | 2) => {
   let draftResult = ``;
-  let draftNumbers: { [key: number]: string } & { extra: string } = {
+  let draftNumbers: { drafts: string[], extra: string } = {
+    drafts: [],
     extra: record[`${draft}:extra`],
   };
 
   for (let i = 1; i <= 6; i += 1) {
     const draftNumber = record[`${draft}:${i}`];
-    draftNumbers[i] = draftNumber;
-    draftResult += draftNumber;
+    draftNumbers.drafts.push(draftNumber);
+    draftResult += `${draftNumber} `;
   }
 
   return {
-    result: draftResult,
+    result: draftResult.trimRight(),
     ...draftNumbers,
   };
 }

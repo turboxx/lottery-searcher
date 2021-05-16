@@ -1,30 +1,31 @@
 import React from 'react';
 import {LotteryRecord} from "../../types/Lottery";
 
-const getHighlightedText = (text: string, highlight?: string) => {
-  if (!highlight) {
-    return text;
+const getHighlightedText = (drafts: string[], highlight?: string[]) => {
+  if (!highlight?.length) {
+    return drafts.join(' ');
   }
-  // Split on highlight term and include term into parts, ignore case
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-  return <span> { parts.map((part, i) =>
-    <span key={i} style={part.toLowerCase() === highlight.toLowerCase() ? { fontWeight: 'bold' } : {} }>
-            { part }
-        </span>)
-  } </span>;
+
+  return <span>
+    { drafts.map((draftedNumber, i) =>
+      <span key={i} style={highlight.includes(draftedNumber.toLowerCase()) ? { fontWeight: 'bold' } : {} }>
+        { draftedNumber } { i <= draftedNumber.length - 1 ? " " : ''}
+      </span>)
+    }
+  </span>;
 }
 
 type RecordRowProps = {
   record: LotteryRecord
-  search?: string;
+  search?: string[];
 };
 
 const RecordRow = ({record, search}: RecordRowProps) => {
   return (
     <div className="flex flex-wrap overflow-hidden">
       <div className="w-1/3">{record.date}</div>
-      <div className="w-1/3">{getHighlightedText(record.firstDraft.result, search)}</div>
-      <div className="w-1/3">{getHighlightedText(record.secondDraft.result, search)}</div>
+      <div className="w-1/3">{getHighlightedText(record.firstDraft.drafts, search)}</div>
+      <div className="w-1/3">{getHighlightedText(record.secondDraft.drafts, search)}</div>
     </div>
   );
 };
