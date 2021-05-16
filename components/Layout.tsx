@@ -9,7 +9,7 @@ const Layout: React.FunctionComponent<Props> = ({
   children,
   title = 'This is the default title',
 }) => (
-  <div>
+  <div className="w-full mx-20">
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />

@@ -1,13 +1,35 @@
 import * as React from 'react'
 import Layout from '../components/Layout'
-import { NextPage } from 'next'
+import {GetStaticProps, NextPage} from 'next'
+import {LotteryRecord} from "../types/Lottery";
+import {fetchLotteryRecords} from "../utils/fetchLotteryRecords";
+import LotteryRecords from "../components/LotteryRecords/LotteryRecords";
 
-const IndexPage: NextPage = () => {
+type Props = {
+  lotteryRecords: LotteryRecord[];
+}
+
+const IndexPage: NextPage<Props> = ({ lotteryRecords }: Props) => {
   return (
-    <Layout title="Home | Next.js + TypeScript Example">
-      <h1>Hello Next.js 👋</h1>
+    <Layout title="Sportka Lottery Records">
+      <div className="mb-5">
+        <h1>Sportka Lottery Records 🔮</h1>
+        <h2># Records {lotteryRecords.length}</h2>
+        <h2>Last record {lotteryRecords[0].date}</h2>
+      </div>
+      <LotteryRecords records={lotteryRecords}/>
     </Layout>
   )
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const lotteryRecords = await fetchLotteryRecords();
+
+  return {
+    props: {
+      lotteryRecords,
+    },
+  };
+};
 
 export default IndexPage
